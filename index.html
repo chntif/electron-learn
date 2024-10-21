@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Application</title>
+    <style>
+        body {
+            background: rgba(138, 169, 216, 0.5);
+            /* 半透明背景 */
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+
+        #todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .todo-item {
+            margin: 5px 0;
+            padding: 5px;
+            background: transparent;
+            border-radius: 4px;
+            color: #003d73;
+        }
+
+        .add-todo {
+            margin-top: 10px;
+        }
+
+        .inp {
+            background-color: transparent;
+            border: 1px solid #003d73;
+        }
+
+        .inp::placeholder {
+            color: #003d73;
+            opacity: 1;
+        }
+
+        .inp:focus {
+            border: none;
+            outline: none;
+            color: #003d73;
+        }
+
+        .btn {
+            background-color: transparent;
+            border: none;
+            color: #003d73;
+        }
+
+        .window-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window-controls">
+        <button class="btn" onclick="minimizeWindow()"> _ </button>
+    </div>
+    <ul id="todo-list"></ul>
+    <div class="add-todo">
+        <input class="inp" type="text" id="new-todo" placeholder="Add a new todo" onkeydown="handleKeyPress(event)" />
+        <button class="btn" onclick="addTodo()">Add</button>
+    </div>
+
+    <script>
+        const todoList = document.getElementById('todo-list');
+
+        function minimizeWindow() {
+            window.electronAPI.minimizeWindow(); // 调用通过预加载脚本暴露的最小化方法
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTodo();
+            }
+        }
+
+        function addTodo() {
+            const newTodoInput = document.getElementById('new-todo');
+            const todoText = newTodoInput.value.trim();
+
+            if (todoText !== '') {
+                const todoItem = document.createElement('li');
+                todoItem.className = 'todo-item';
+                todoItem.textContent = todoText;
+
+                todoItem.addEventListener('click', () => {
+                    todoItem.remove(); // 点击删除待办事项
+                });
+
+                todoList.appendChild(todoItem);
+                newTodoInput.value = ''; // 清空输入框
+            }
+        }
+    </script>
+</body>
+
+</html>
